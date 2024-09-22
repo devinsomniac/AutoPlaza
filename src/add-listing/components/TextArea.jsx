@@ -1,10 +1,10 @@
 import React from 'react'
 import { Textarea } from "@/components/ui/textarea"
 
-const TextArea = () => {
+const TextArea = ({item}) => {
   return (
     <div>
-        <Textarea />
+        <Textarea name={item.name} />
     </div>
   )
 }

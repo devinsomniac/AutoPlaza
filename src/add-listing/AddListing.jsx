@@ -1,9 +1,12 @@
 import Header from "@/components/Header";
 import React from "react";
 import carDetails from "./../Shared/carDetails.json";
+import features from './../Shared/features.json'
 import InputField from "./components/InputField";
 import DropDown from "./components/DropDown";
 import TextArea from "./components/TextArea";
+import CheckBox from "./components/CheckBox";
+import { Button } from "@/components/ui/button";
 
 const AddListing = () => {
   return (
@@ -30,7 +33,25 @@ const AddListing = () => {
           </div>
 
           {/* feature List */}
+          <div className="my-5">
+            <h2 className="font-medium text-xl mb-6">Feature list</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 ">
+              {features.features.map((item,index)=>(
+                <div key={index} className="flex gap-3">
+                     {item.fieldType=="checkbox" ? <CheckBox item={item}/> : null}
+                    <label>{item?.label}</label>
+                </div>
+              ))}
+          </div>
+          </div>
+          
           {/* car Image */}
+          <div>
+            <h2 className="font-medium text-xl mb-6">Upload The Car Image</h2>
+          </div>
+          <div className="mt-10 flex justify-end">
+            <Button>Submit your Listing</Button>
+          </div>
         </form>
       </div>
     </div>
