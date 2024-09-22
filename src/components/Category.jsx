@@ -3,7 +3,7 @@ import data from "@/Shared/data";
 
 const Category = () => {
   return (
-    <div className="mt-40 mb-40">
+    <div className="mt-40">
       <h2 className="font-bold text-2xl text-center mb-6">Browse By Type</h2>
       <div
         className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6
