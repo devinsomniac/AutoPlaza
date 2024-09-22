@@ -7,10 +7,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const DropDown = ({ item }) => {
+const DropDown = ({ item ,handleInputChange,selectedValue}) => {
   return (
     <div>
-      <Select>
+      <Select onValueChange={(value)=>handleInputChange(item.name,value)} value={selectedValue}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder={item?.label} />
         </SelectTrigger>

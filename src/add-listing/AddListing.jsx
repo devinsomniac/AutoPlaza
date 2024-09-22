@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import React from "react";
+import React, { useState } from "react";
 import carDetails from "./../Shared/carDetails.json";
 import features from './../Shared/features.json'
 import InputField from "./components/InputField";
@@ -9,6 +9,22 @@ import CheckBox from "./components/CheckBox";
 import { Button } from "@/components/ui/button";
 
 const AddListing = () => {
+    const [formdata,setFormData] = useState([])
+
+    const handleInputChange = (name,value) => {
+        setFormData((prevData)=>({
+            ...prevData,
+            [name]:value
+        }))
+        
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault()
+        console.log(formdata)
+    }
+
+    console.log(formdata)
   return (
     <div>
       <Header />
@@ -23,9 +39,9 @@ const AddListing = () => {
                 <div>
                   <label className="text-sm " >{item.label} {item.required&& <span className="text-red-700">*</span>}</label>
                   {item.fieldType == "text" || item.fieldType == "number" ? (
-                    <InputField item={item} />
-                  ) : item.fieldType == "dropdown" ? <DropDown item={item} />
-                  : item.fieldType == "textarea" ? <TextArea item={item}/>
+                    <InputField item={item} handleInputChange={handleInputChange} />
+                  ) : item.fieldType == "dropdown" ? <DropDown item={item} handleInputChange={handleInputChange} selectedValue={formdata[item.name]}/>
+                  : item.fieldType == "textarea" ? <TextArea item={item} handleInputChange={handleInputChange}/>
                   :null}
                 </div>
               ))}
@@ -38,7 +54,7 @@ const AddListing = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 ">
               {features.features.map((item,index)=>(
                 <div key={index} className="flex gap-3">
-                     {item.fieldType=="checkbox" ? <CheckBox item={item}/> : null}
+                     {item.fieldType=="checkbox" ? <CheckBox item={item} handleInputChange={handleInputChange}/> : null}
                     <label>{item?.label}</label>
                 </div>
               ))}
@@ -50,7 +66,7 @@ const AddListing = () => {
             <h2 className="font-medium text-xl mb-6">Upload The Car Image</h2>
           </div>
           <div className="mt-10 flex justify-end">
-            <Button>Submit your Listing</Button>
+            <Button type="submit" onClick={(e)=>onSubmit(e)}>Submit your Listing</Button>
           </div>
         </form>
       </div>
