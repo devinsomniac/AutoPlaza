@@ -8,7 +8,7 @@ const Hero = () => {
         <h2 className="text-lg">Find cars for sale and for rent near you</h2>
         <h2 className="text-[60px] font-bold">Find your Dream car</h2>
         <Search/>
-        <img src="/tesla.png" className="mt-10"/>
+        <img src="/tesla.png" className="mt-10 hover:scale-105 transition-transform duration-500 ease-in-out "/>
       </div>
     </div>
   );
