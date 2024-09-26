@@ -7,6 +7,8 @@ import DropDown from "./components/DropDown";
 import TextArea from "./components/TextArea";
 import CheckBox from "./components/CheckBox";
 import { Button } from "@/components/ui/button";
+import {db} from './../../configs'
+import { CarList } from "./../../configs/schema";
 
 const AddListing = () => {
     const [formdata,setFormData] = useState([])
@@ -19,9 +21,20 @@ const AddListing = () => {
         
     }
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault()
-        console.log(formdata)
+        console.log(formdata);
+        try{
+          const result = await db.insert(CarList).values(formdata)
+          if(result){
+            console.log("Data Saved",formdata)
+          }
+        }
+        catch(err){
+          console.log("There has benn an error",err)
+        }
+      
+
     }
 
     console.log(formdata)
