@@ -12,6 +12,7 @@ import { CarList } from "./../../configs/schema";
 
 const AddListing = () => {
     const [formdata,setFormData] = useState([])
+    const [feature,setFeature] = useState([])
 
     const handleInputChange = (name,value) => {
         setFormData((prevData)=>({
@@ -19,6 +20,17 @@ const AddListing = () => {
             [name]:value
         }))
         
+    }
+
+    const handleFeatureChange = (name,value) => {
+      setFeature((prevData)=>(
+        {
+          ...prevData,
+          [name]:value
+        }
+      ))
+      console.log(feature)
+
     }
 
     const onSubmit = async (e) => {
@@ -67,7 +79,7 @@ const AddListing = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-5 ">
               {features.features.map((item,index)=>(
                 <div key={index} className="flex gap-3">
-                     {item.fieldType=="checkbox" ? <CheckBox item={item} handleInputChange={handleInputChange}/> : null}
+                     {item.fieldType=="checkbox" ? <CheckBox item={item} handleFeatureChange={handleFeatureChange}/> : null}
                     <label>{item?.label}</label>
                 </div>
               ))}
