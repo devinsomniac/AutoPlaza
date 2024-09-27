@@ -1,3 +1,6 @@
+import { Button } from '@/components/ui/button';
+import { storage } from './../../../configs/firebaseConfig';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import React, { useState } from 'react'
 import { MdDelete } from "react-icons/md";
 
@@ -13,6 +16,25 @@ const UploadImages = () => {
     const onImageRemove = (image,index) => {
         const result = fileList.filter((item)=>item!=image)
         setFileList(result)
+    }
+
+    //To get the url of image in firebase
+
+    const uploadImagesToFirebase = () => {
+        fileList.forEach((file)=>{
+            const fileName = Date.now() + '.jpeg'
+            const storageRef = ref(storage,'AutoPlazaImages/'+fileName)
+            const metaData = {
+                contentType : 'image/jpeg'
+            }
+            uploadBytes(storageRef,file,metaData).then((snapShot)=>{
+                console.log('Uploaded file')
+            }).then(resp => {
+                getDownloadURL(storageRef).then(async(downloadUrl)=>{
+                    console.log(downloadUrl)
+                })
+            })
+        })
     }
   return (
     <div>

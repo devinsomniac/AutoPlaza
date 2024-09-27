@@ -15,6 +15,7 @@ import { Separator } from "@/components/ui/separator";
 const AddListing = () => {
   const [formdata, setFormData] = useState([]);
   const [feature, setFeature] = useState([]);
+  const [triggerUploadImage,setTriggerUploadImage]  = useState()
 
   const handleInputChange = (name, value) => {
     setFormData((prevData) => ({
@@ -41,6 +42,7 @@ const AddListing = () => {
       });
       if (result) {
         console.log("Data Saved", formdata);
+        setTriggerUploadImage()
       }
     } catch (err) {
       console.log("There has benn an error", err);
@@ -116,6 +118,7 @@ const AddListing = () => {
           </div>
           <Separator className="my-6" />
         </form>
+       
       </div>
     </div>
   );
