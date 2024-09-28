@@ -16,6 +16,7 @@ const AddListing = () => {
   const [formdata, setFormData] = useState([]);
   const [feature, setFeature] = useState([]);
   const [triggerUploadImage,setTriggerUploadImage]  = useState()
+  const [loader,setLoader] = useState(false)
 
   const handleInputChange = (name, value) => {
     setFormData((prevData) => ({
@@ -33,16 +34,18 @@ const AddListing = () => {
   };
 
   const onSubmit = async (e) => {
+    setLoader(true)
     e.preventDefault();
     console.log(formdata);
     try {
       const result = await db.insert(CarList).values({
         ...formdata,
         features: feature,
-      });
+      }).returning({id:CarList.id});
       if (result) {
         console.log("Data Saved", formdata);
-        setTriggerUploadImage()
+        setTriggerUploadImage(result[0]?.id)
+        setLoader(false)
       }
     } catch (err) {
       console.log("There has benn an error", err);
@@ -109,7 +112,7 @@ const AddListing = () => {
           {/* car Image */}
           <div>
             <h2 className="font-medium text-xl mb-6">Upload The Car Image</h2>
-            <UploadImages />
+            <UploadImages triggerUploadImage={triggerUploadImage} setLoader={(v)=>setLoader(v)} />
           </div>
           <div className="mt-10 flex justify-end">
             <Button type="submit" onClick={(e) => onSubmit(e)}>

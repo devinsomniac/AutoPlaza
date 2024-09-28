@@ -1,11 +1,18 @@
 import { Button } from '@/components/ui/button';
 import { storage } from './../../../configs/firebaseConfig';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdDelete } from "react-icons/md";
+import { db } from "./../../../configs";
+import { CarImages } from "./../../../configs/schema";
 
-const UploadImages = () => {
+const UploadImages = ({triggerUploadImage,setLoader}) => {
     const [fileList,setFileList] = useState([])
+    useEffect(()=>{
+        if(triggerUploadImage){
+            uploadImagesToFirebase()
+        }
+    },[triggerUploadImage])
     const onFileSelected = (event) => {
         const files = event.target.files
         for(let i = 0;i<files?.length;i++){
@@ -20,8 +27,9 @@ const UploadImages = () => {
 
     //To get the url of image in firebase
 
-    const uploadImagesToFirebase = () => {
-        fileList.forEach((file)=>{
+    const uploadImagesToFirebase = async() => {
+        setLoader(true)
+        await fileList.forEach((file)=>{
             const fileName = Date.now() + '.jpeg'
             const storageRef = ref(storage,'AutoPlazaImages/'+fileName)
             const metaData = {
@@ -32,9 +40,15 @@ const UploadImages = () => {
             }).then(resp => {
                 getDownloadURL(storageRef).then(async(downloadUrl)=>{
                     console.log(downloadUrl)
+                    await db.insert(CarImages).values({
+                        imageUrl : downloadUrl,
+                        carListId : triggerUploadImage
+                    })
                 })
             })
+            setLoader(false)
         })
+
     }
   return (
     <div>
