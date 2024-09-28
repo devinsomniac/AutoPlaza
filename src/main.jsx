@@ -7,6 +7,7 @@ import ContactPage from "./contact";
 import { ClerkProvider } from '@clerk/clerk-react'
 import Profile from "./profile/Profile";
 import AddListing from "./add-listing/AddListing";
+import { Toaster } from "./components/ui/sonner";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
       <RouterProvider router={router} />
+      <Toaster />
     </ClerkProvider>
   </StrictMode>
 );

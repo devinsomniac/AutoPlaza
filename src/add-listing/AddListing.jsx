@@ -11,12 +11,18 @@ import { db } from "./../../configs";
 import { CarList } from "./../../configs/schema";
 import UploadImages from "./components/UploadImages";
 import { Separator } from "@/components/ui/separator";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { Toaster } from "../components/ui/sonner";
+import { toast } from "../components/ui/sonner";
+import { useNavigate, useNavigation } from "react-router-dom";
+
 
 const AddListing = () => {
   const [formdata, setFormData] = useState([]);
   const [feature, setFeature] = useState([]);
   const [triggerUploadImage,setTriggerUploadImage]  = useState()
   const [loader,setLoader] = useState(false)
+  const navigate = useNavigate()
 
   const handleInputChange = (name, value) => {
     setFormData((prevData) => ({
@@ -37,6 +43,7 @@ const AddListing = () => {
     setLoader(true)
     e.preventDefault();
     console.log(formdata);
+    toast('Please Wait ...')
     try {
       const result = await db.insert(CarList).values({
         ...formdata,
@@ -109,14 +116,19 @@ const AddListing = () => {
             </div>
           </div>
           <Separator className="my-6" />
+
           {/* car Image */}
+
           <div>
             <h2 className="font-medium text-xl mb-6">Upload The Car Image</h2>
-            <UploadImages triggerUploadImage={triggerUploadImage} setLoader={(v)=>setLoader(v)} />
+            <UploadImages triggerUploadImage={triggerUploadImage} setLoader={(v)=>{setLoader(v);navigate('/profile')}} />
           </div>
           <div className="mt-10 flex justify-end">
-            <Button type="submit" onClick={(e) => onSubmit(e)}>
-              Submit your Listing
+
+
+            {/*The Submit Button of the form */}
+            <Button type="submit" onClick={(e) => onSubmit(e)} disabled={loader}>
+              {!loader ? 'Submit' : <AiOutlineLoading3Quarters className="animate-spin text-lg" />}
             </Button>
           </div>
           <Separator className="my-6" />
