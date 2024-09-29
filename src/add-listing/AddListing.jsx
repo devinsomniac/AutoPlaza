@@ -15,6 +15,8 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { Toaster } from "../components/ui/sonner";
 import { toast } from "../components/ui/sonner";
 import { useNavigate, useNavigation } from "react-router-dom";
+import { useUser } from "@clerk/clerk-react";
+import moment from "moments"
 
 
 const AddListing = () => {
@@ -23,7 +25,7 @@ const AddListing = () => {
   const [triggerUploadImage,setTriggerUploadImage]  = useState()
   const [loader,setLoader] = useState(false)
   const navigate = useNavigate()
-
+  const {user} = useUser()
   const handleInputChange = (name, value) => {
     setFormData((prevData) => ({
       ...prevData,
@@ -48,6 +50,8 @@ const AddListing = () => {
       const result = await db.insert(CarList).values({
         ...formdata,
         features: feature,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+        postedOn: moment().format('DD/MM/yyyy')
       }).returning({id:CarList.id});
       if (result) {
         console.log("Data Saved", formdata);

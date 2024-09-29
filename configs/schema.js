@@ -21,7 +21,9 @@ export const CarList = pgTable('CarList',{
     vin:varchar('vin'),
     offerType:varchar('offerType'),
     listingDescription:varchar('listingDescription').notNull(),
-    features:json('features')
+    features:json('features'),
+    craetedBy:varchar('createdBy').notNull().default('inzamamchowdhury20"gmail.com'),
+    postedOn:varchar('postedBy')
 
 })
 
