@@ -12,11 +12,10 @@ import { CarList } from "./../../configs/schema";
 import UploadImages from "./components/UploadImages";
 import { Separator } from "@/components/ui/separator";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { Toaster } from "../components/ui/sonner";
-import { toast } from "../components/ui/sonner";
+// import { toast } from "../components/ui/sonner";
 import { useNavigate, useNavigation } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
-import moment from "moments"
+// import moment from "moments"
 
 
 const AddListing = () => {
@@ -45,13 +44,13 @@ const AddListing = () => {
     setLoader(true)
     e.preventDefault();
     console.log(formdata);
-    toast('Please Wait ...')
+    // toast('Please Wait ...')
     try {
       const result = await db.insert(CarList).values({
         ...formdata,
         features: feature,
         createdBy: user?.primaryEmailAddress?.emailAddress,
-        postedOn: moment().format('DD/MM/yyyy')
+        postedOn: Date.now()
       }).returning({id:CarList.id});
       if (result) {
         console.log("Data Saved", formdata);
