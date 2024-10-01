@@ -24,7 +24,9 @@ const Header = () => {
       </ul>
       {isSignedIn ? (
         <div className="flex justify-center items-center gap-5">
+          <Link to={"/profile"}>
           <UserButton />
+          </Link>
           <Link to="/add-listing">
             <Button>Submit Listing</Button>
           </Link>
