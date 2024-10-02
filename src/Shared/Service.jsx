@@ -17,6 +17,8 @@ const FormatResult = (res) => {
         finalResult.push({
             ...item.car,
             Images:item.Images
+            Images2:item.Images
+
         })
     })
 
