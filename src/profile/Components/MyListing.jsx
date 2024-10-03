@@ -1,15 +1,19 @@
 import { Button } from '@/components/ui/button'
 import { db } from './../../../configs'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CarImages, CarList } from './../../../configs/schema'
 import { desc, eq } from 'drizzle-orm'
 import { useUser } from '@clerk/clerk-react'
-// import {FormatResult} from "../../Shared/Service"
+import {FormatResult} from './../../Shared/Service';
+import CarItem from '@/components/CarItem'
+import { FaEdit } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 
 const MyListing = () => {
     const {user} = useUser()
+    const[carList,setCarList] = useState([])
     useEffect(()=>{
         user&&getUserCarListing()
     },[user])  
@@ -18,8 +22,9 @@ const MyListing = () => {
         .leftJoin(CarImages,eq(CarList.id,CarImages.carListId))
         .where(eq(CarList.createdBy,user?.primaryEmailAddress?.emailAddress))
         .orderBy(desc(CarList.id))
-        // const resp = Service.FormatResult(result)
-        console.log(result)
+        const res = FormatResult(result)
+        setCarList(res)
+        console.log(res)
     }
   return (
     <div className='mt-6'>
@@ -28,6 +33,19 @@ const MyListing = () => {
             <Link to={"/add-listing"}>
                 <Button>+ Add New Listing</Button>
             </Link>
+        </div>
+        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-7 gap-5'>
+            {carList.map((item,index)=>(
+                <div key={index}>
+                    <CarItem
+                        car={item}
+                    />
+                    <div className='flex justify-around p-2 rounded-lg gap-2'>
+                        <Button variant="outline" className="w-full"><FaEdit/></Button>
+                        <Button variant="destructive"><FaRegTrashAlt /></Button>
+                    </div>
+                </div>
+            ))}
         </div>
     </div>
   )
