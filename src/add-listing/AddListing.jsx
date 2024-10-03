@@ -1,5 +1,5 @@
 import Header from "@/components/Header";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import carDetails from "./../Shared/carDetails.json";
 import features from "./../Shared/features.json";
 import InputField from "./components/InputField";
@@ -8,23 +8,48 @@ import TextArea from "./components/TextArea";
 import CheckBox from "./components/CheckBox";
 import { Button } from "@/components/ui/button";
 import { db } from "./../../configs";
-import { CarList } from "./../../configs/schema";
+import { desc, eq } from 'drizzle-orm'
+import { CarImages, CarList } from "./../../configs/schema";
 import UploadImages from "./components/UploadImages";
 import { Separator } from "@/components/ui/separator";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 // import { toast } from "../components/ui/sonner";
-import { useNavigate, useNavigation } from "react-router-dom";
+import { useNavigate, useNavigation, useSearchParams } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
+import { FormatResult } from "@/Shared/Service";
 // import moment from "moments"
+
 
 
 const AddListing = () => {
   const [formdata, setFormData] = useState([]);
   const [feature, setFeature] = useState([]);
   const [triggerUploadImage,setTriggerUploadImage]  = useState()
+  const [searchParams] = useSearchParams()
   const [loader,setLoader] = useState(false)
   const navigate = useNavigate()
   const {user} = useUser()
+  const [carInfo,setCarInfo] = useState()
+
+  const mode=searchParams.get('mode')
+  const recordId =searchParams.get('id')
+
+  useEffect(()=>{
+    if(mode=='edit'){
+      GetListingDetail()
+    }
+  },[])
+
+  const GetListingDetail = async() =>{
+    const result = await db.select().from(CarList)
+    .innerJoin(CarImages,eq(CarList.id,CarImages.carListId))
+    .where(eq(CarList.id,recordId))
+    console.log(result) 
+    const resp = FormatResult(result)
+    setCarInfo(resp[0 ])
+
+  }
+
   const handleInputChange = (name, value) => {
     setFormData((prevData) => ({
       ...prevData,
