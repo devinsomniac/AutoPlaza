@@ -1,28 +1,28 @@
-const FormatResult = (res) => {
-    let result = []
+export const  FormatResult = (res) => {
+    let result =[]
     let finalResult = []
     res.forEach((item)=>{
-        const listingId = item.carList?.id
+        const listingId = item.CarList?.id
         if(!result[listingId]){
-            result[listingId]={
-                car:item.carList,
-                Images:[]
+            result[listingId] = {
+                car:item.CarList,
+                Image:[]
             }
         }
         if(item.carImages){
-            result[listingId].Images.push(item.carImages)
+            result[listingId].Image.push(item.carImages)
         }
     })
+
     result.forEach((item)=>{
         finalResult.push({
             ...item.car,
-            Images:item.Images
-            Images2:item.Images
+            images:item.Image
 
         })
     })
 
+
     return finalResult
 }
 
-export default FormatResult
