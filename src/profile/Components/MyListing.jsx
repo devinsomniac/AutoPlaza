@@ -41,7 +41,9 @@ const MyListing = () => {
                         car={item}
                     />
                     <div className='flex justify-around p-2 rounded-lg gap-2'>
+                        <Link to={"/add-listing?mode=edit&id="+item?.id} className='w-full'>
                         <Button variant="outline" className="w-full"><FaEdit/></Button>
+                        </Link>
                         <Button variant="destructive"><FaRegTrashAlt /></Button>
                     </div>
                 </div>
