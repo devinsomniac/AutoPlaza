@@ -173,7 +173,7 @@ const AddListing = () => {
           <div>
             <h2 className="font-medium text-xl mb-6">Upload The Car Image</h2>
             <UploadImages triggerUploadImage={triggerUploadImage}
-            mode = {mode}
+             mode = {mode}
              carInfo={carInfo}
              setLoader={(v)=>{setLoader(v);}} />
           </div>
