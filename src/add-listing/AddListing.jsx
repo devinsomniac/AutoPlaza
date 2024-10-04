@@ -30,9 +30,9 @@ const AddListing = () => {
   const navigate = useNavigate()
   const {user} = useUser()
   const [carInfo,setCarInfo] = useState()
-
   const mode=searchParams.get('mode')
   const recordId =searchParams.get('id')
+
 
   useEffect(()=>{
     if(mode=='edit'){
@@ -40,13 +40,17 @@ const AddListing = () => {
     }
   },[])
 
+
   const GetListingDetail = async() =>{
     const result = await db.select().from(CarList)
     .innerJoin(CarImages,eq(CarList.id,CarImages.carListId))
     .where(eq(CarList.id,recordId))
-    console.log(result) 
     const resp = FormatResult(result)
-    setCarInfo(resp[0 ])
+    console.log(resp) 
+    setCarInfo(resp[0])
+    setFormData(resp[0])
+    setFeature(resp[0].features)
+    
 
   }
 
@@ -57,6 +61,7 @@ const AddListing = () => {
     }));
   };
 
+
   const handleFeatureChange = (name, value) => {
     setFeature((prevData) => ({
       ...prevData,
@@ -65,11 +70,24 @@ const AddListing = () => {
     console.log(feature);
   };
 
+
   const onSubmit = async (e) => {
     setLoader(true)
     e.preventDefault();
     console.log(formdata);
     // toast('Please Wait ...')
+    if(mode=="edit"){
+      const result = await db.update(CarList)
+      .set({
+        ...formdata,
+        features: feature,
+        createdBy: user?.primaryEmailAddress?.emailAddress,
+        postedOn: Date.now()
+      })
+      .where(eq(CarList.id,recordId)).returning({id:CarList.id})
+      setLoader(false)
+      navigate('/profile')
+    }else{
     try {
       const result = await db.insert(CarList).values({
         ...formdata,
@@ -81,13 +99,14 @@ const AddListing = () => {
         console.log("Data Saved", formdata);
         setTriggerUploadImage(result[0]?.id)
         setLoader(false)
+        navigate('/profile')
       }
     } catch (err) {
       console.log("There has benn an error", err);
     }
+  }
   };
 
-  console.log(formdata);
   return (
     <div>
       <Header />
@@ -101,24 +120,27 @@ const AddListing = () => {
               {carDetails.carDetails.map((item, index) => (
                 <div>
                   <label className="text-sm ">
-                    {item.label}{" "}
+                    {item.label}
                     {item.required && <span className="text-red-700">*</span>}
                   </label>
                   {item.fieldType == "text" || item.fieldType == "number" ? (
                     <InputField
                       item={item}
                       handleInputChange={handleInputChange}
+                      carInfo={carInfo}
                     />
                   ) : item.fieldType == "dropdown" ? (
                     <DropDown
                       item={item}
                       handleInputChange={handleInputChange}
                       selectedValue={formdata[item.name]}
+                      carInfo={carInfo}
                     />
                   ) : item.fieldType == "textarea" ? (
                     <TextArea
                       item={item}
                       handleInputChange={handleInputChange}
+                      carInfo={carInfo}
                     />
                   ) : null}
                 </div>
@@ -136,6 +158,7 @@ const AddListing = () => {
                     <CheckBox
                       item={item}
                       handleFeatureChange={handleFeatureChange}
+                      feature = {feature}
                     />
                   ) : null}
                   <label>{item?.label}</label>
@@ -149,7 +172,10 @@ const AddListing = () => {
 
           <div>
             <h2 className="font-medium text-xl mb-6">Upload The Car Image</h2>
-            <UploadImages triggerUploadImage={triggerUploadImage} setLoader={(v)=>{setLoader(v);navigate('/profile')}} />
+            <UploadImages triggerUploadImage={triggerUploadImage}
+            mode = {mode}
+             carInfo={carInfo}
+             setLoader={(v)=>{setLoader(v);}} />
           </div>
           <div className="mt-10 flex justify-end">
 
