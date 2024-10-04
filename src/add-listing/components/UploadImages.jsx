@@ -6,8 +6,9 @@ import { MdDelete } from "react-icons/md";
 import { db } from "./../../../configs";
 import { CarImages } from "./../../../configs/schema";
 
-const UploadImages = ({triggerUploadImage,setLoader}) => {
+const UploadImages = ({triggerUploadImage,setLoader,carInfo,mode}) => {
     const [fileList,setFileList] = useState([])
+    const [editCarImage,SetEditCarImage] = useState([])
     useEffect(()=>{
         if(triggerUploadImage){
             uploadImagesToFirebase()
