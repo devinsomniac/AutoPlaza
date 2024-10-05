@@ -76,18 +76,18 @@ const AddListing = () => {
     e.preventDefault();
     console.log(formdata);
     // toast('Please Wait ...')
-    if(mode=="edit"){
-      const result = await db.update(CarList)
-      .set({
-        ...formdata,
-        features: feature,
-        createdBy: user?.primaryEmailAddress?.emailAddress,
-        postedOn: Date.now()
-      })
-      .where(eq(CarList.id,recordId)).returning({id:CarList.id})
-      setLoader(false)
-      navigate('/profile')
-    }else{
+    // if(mode=="edit"){
+    //   const result = await db.update(CarList)
+    //   .set({
+    //     ...formdata,
+    //     features: feature,
+    //     createdBy: user?.primaryEmailAddress?.emailAddress,
+    //     postedOn: Date.now()
+    //   })
+    //   .where(eq(CarList.id,recordId)).returning({id:CarList.id})
+    //   setLoader(false)
+    //   navigate('/profile')
+    // }else{
     try {
       const result = await db.insert(CarList).values({
         ...formdata,
@@ -97,7 +97,10 @@ const AddListing = () => {
       }).returning({id:CarList.id});
       if (result) {
         console.log("Data Saved", formdata);
-        setTriggerUploadImage(result[0]?.id)
+        console.log(result[0]?.id)
+        const newId = result[0]?.id;
+        setTriggerUploadImage(newId);
+        console.log(triggerUploadImage)
         setLoader(false)
         navigate('/profile')
       }
@@ -105,7 +108,7 @@ const AddListing = () => {
       console.log("There has benn an error", err);
     }
   }
-  };
+ 
 
   return (
     <div>
