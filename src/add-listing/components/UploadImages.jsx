@@ -9,15 +9,15 @@ const UploadImages = ({ triggerUploadImage, setLoader, carInfo, mode }) => {
   const [fileList, setFileList] = useState([]);
   const [editFileList,SetEditFileList] = useState([])
 
-  // useEffect(()=>{
-  //   if(mode==="edit" && carInfo){
-  //     SetEditFileList([]); 
-  //     for(let i = 0; i <carInfo?.images?.length;i++ ){
-  //       SetEditFileList((prev)=>[...prev,carInfo.images[i].imageUrl])
-  //       console.log(editFileList)
-  //     }
-  //   }
-  // },[mode,carInfo])
+  useEffect(()=>{
+    if(mode==="edit" && carInfo){
+      SetEditFileList([]); 
+      for(let i = 0; i <carInfo?.images?.length;i++ ){
+        SetEditFileList((prev)=>[...prev,carInfo.images[i].imageUrl])
+        console.log(editFileList)
+      }
+    }
+  },[mode,carInfo])
 
 
   useEffect(() => {

@@ -13,11 +13,9 @@ import { CarImages, CarList } from "./../../configs/schema";
 import UploadImages from "./components/UploadImages";
 import { Separator } from "@/components/ui/separator";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-// import { toast } from "../components/ui/sonner";
-import { useNavigate, useNavigation, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import { FormatResult } from "@/Shared/Service";
-// import moment from "moments"
 
 
 
@@ -30,12 +28,12 @@ const AddListing = () => {
   const navigate = useNavigate()
   const {user} = useUser()
   const [carInfo,setCarInfo] = useState()
-  const mode=searchParams.get('mode')
-  const recordId =searchParams.get('id')
+  const mode = searchParams.get('mode')
+  const recordId = searchParams.get('id')
 
 
   useEffect(()=>{
-    if(mode=='edit'){
+    if(mode==='edit'){
       GetListingDetail()
     }
   },[])
@@ -75,19 +73,22 @@ const AddListing = () => {
     setLoader(true)
     e.preventDefault();
     console.log(formdata);
-    // toast('Please Wait ...')
-    // if(mode=="edit"){
-    //   const result = await db.update(CarList)
-    //   .set({
-    //     ...formdata,
-    //     features: feature,
-    //     createdBy: user?.primaryEmailAddress?.emailAddress,
-    //     postedOn: Date.now()
-    //   })
-    //   .where(eq(CarList.id,recordId)).returning({id:CarList.id})
-    //   setLoader(false)
-    //   navigate('/profile')
-    // }else{
+    if(mode === "edit"){
+      try{
+        await db.update(CarList)
+        .set({
+          ...formdata,
+          features:feature,
+          createdBy:user?.primaryEmailAddress?.emailAddress,
+          postedOn:Date.now()
+        })
+        .where(eq(CarList.id,recordId))
+        setLoader(false)
+        navigate("/profile")
+      }catch(e){
+        console.error("Error updating the listing", err);
+      }
+    }else{
     try {
       const result = await db.insert(CarList).values({
         ...formdata,
@@ -95,18 +96,14 @@ const AddListing = () => {
         createdBy: user?.primaryEmailAddress?.emailAddress,
         postedOn: Date.now()
       }).returning({id:CarList.id});
-      if (result) {
-        console.log("Data Saved", formdata);
-        console.log(result[0]?.id)
-        const newId = result[0]?.id;
-        setTriggerUploadImage(newId);
-        console.log(triggerUploadImage)
-        setLoader(false)
-        navigate('/profile')
-      }
+      const newId  = result[0]?.id
+      setTriggerUploadImage(newId)
+      setLoader(false)
+      navigate("/profile")
     } catch (err) {
       console.log("There has benn an error", err);
     }
+  }
   }
  
 
@@ -121,7 +118,7 @@ const AddListing = () => {
             <h2 className="font-medium text-xl mb-6">Car Details</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {carDetails.carDetails.map((item, index) => (
-                <div>
+                <div key={index}>
                   <label className="text-sm ">
                     {item.label}
                     {item.required && <span className="text-red-700">*</span>}

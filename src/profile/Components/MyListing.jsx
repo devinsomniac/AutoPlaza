@@ -25,9 +25,13 @@ const MyListing = () => {
   const { user } = useUser();
   const [carList, setCarList] = useState([]);
   const [deleteCarId, setDeleteCarId] = useState(null);
+
+  
   useEffect(() => {
     user && getUserCarListing();
   }, [user]);
+
+
   const getUserCarListing = async () => {
     const result = await db
       .select()
