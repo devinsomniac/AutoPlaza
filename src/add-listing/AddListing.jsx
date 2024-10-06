@@ -75,7 +75,7 @@ const AddListing = () => {
     console.log(formdata);
     if(mode === "edit"){
       try{
-        await db.update(CarList)
+        const result = await db.update(CarList)
         .set({
           ...formdata,
           features:feature,
@@ -85,7 +85,7 @@ const AddListing = () => {
         .where(eq(CarList.id,recordId))
         setLoader(false)
         navigate("/profile")
-      }catch(e){
+      }catch(err){
         console.error("Error updating the listing", err);
       }
     }else{
@@ -96,8 +96,13 @@ const AddListing = () => {
         createdBy: user?.primaryEmailAddress?.emailAddress,
         postedOn: Date.now()
       }).returning({id:CarList.id});
-      const newId  = result[0]?.id
-      setTriggerUploadImage(newId)
+      if(result)
+        {
+            console.log("Data Saved")
+            setTriggerUploadImage(result[0]?.id);
+            setLoader(false);
+        }
+      console.log(triggerUploadImage)
       setLoader(false)
       navigate("/profile")
     } catch (err) {
@@ -172,7 +177,9 @@ const AddListing = () => {
 
           <div>
             <h2 className="font-medium text-xl mb-6">Upload The Car Image</h2>
-            <UploadImages triggerUploadImage={triggerUploadImage}
+            <UploadImages
+             editFileList = {carInfo?.images || []} 
+             triggerUploadImage={triggerUploadImage}
              mode = {mode}
              carInfo={carInfo}
              setLoader={(v)=>{setLoader(v);}} />

@@ -4,21 +4,11 @@ import React, { useEffect, useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { db } from "./../../../configs";
 import { CarImages } from "./../../../configs/schema";
+import { desc, eq } from 'drizzle-orm'
 
 const UploadImages = ({ triggerUploadImage, setLoader, carInfo, mode }) => {
   const [fileList, setFileList] = useState([]);
-  const [editFileList,SetEditFileList] = useState([])
-
-  useEffect(()=>{
-    if(mode==="edit" && carInfo){
-      SetEditFileList([]); 
-      for(let i = 0; i <carInfo?.images?.length;i++ ){
-        SetEditFileList((prev)=>[...prev,carInfo.images[i].imageUrl])
-        console.log(editFileList)
-      }
-    }
-  },[mode,carInfo])
-
+  const [editImageList,SetEditImageList] = useState([])
 
   useEffect(() => {
     if (triggerUploadImage) {
@@ -26,6 +16,19 @@ const UploadImages = ({ triggerUploadImage, setLoader, carInfo, mode }) => {
       uploadImagesToFirebase();
     }
   }, [triggerUploadImage]);
+
+  useEffect(()=>{
+    if(mode==="edit" && carInfo){
+      SetEditImageList([]); 
+      for(let i = 0; i <carInfo?.images?.length;i++ ){
+        SetEditImageList((prev)=>[...prev,carInfo.images[i].imageUrl])
+        console.log(editImageList)
+      }
+    }
+  },[mode,carInfo])
+
+
+  
 
 
   const onFileSelected = (event) => {
@@ -35,16 +38,19 @@ const UploadImages = ({ triggerUploadImage, setLoader, carInfo, mode }) => {
       setFileList((prevData) => [...prevData, file]);
     }
   };
-  const onImageRemove = (image, index) => {
+  const onImageRemove = async(image, index) => {
     const newFileResult = fileList.filter((item) => item != image);
     setFileList(newFileResult);
-
-    const updatedList = editFileList.filter((_, i) => i !== index);
-    SetEditFileList(updatedList);
-
-
-
   };
+
+
+  const onImageRemoveFromDB=async(image,index)=>{
+    const result=await db.delete(CarImages).where(eq(CarImages.id,carInfo?.images[index]?.id)).returning({id:CarImages.id});
+
+    const imageList=editImageList.filter(item=>item!=image);
+    SetEditImageList(imageList);
+
+}
 
   //To get the url of image in firebase
 
@@ -78,11 +84,11 @@ const UploadImages = ({ triggerUploadImage, setLoader, carInfo, mode }) => {
   return (
     <div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5  ">
-      {editFileList.map((image, index) => (
+      {editImageList.map((image, index) => (
           <div key={index}>
             <MdDelete
               className="text-lg text-red-700 absolute m-1"
-              onClick={() => onImageRemove(image, index)}
+              onClick={() => onImageRemoveFromDB(image, index)}
             />
             <img
               src={image}
