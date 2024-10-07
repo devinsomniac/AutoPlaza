@@ -47,6 +47,7 @@ const MyListing = () => {
   const handleDelete = async () => {
     if (!deleteCarId) return
     try {
+      await db.delete(CarImages).where(eq(CarImages.carListId, deleteCarId));
       await db.delete(CarList).where(eq(CarList.id, deleteCarId))
       setCarList(prevList => prevList.filter(car => car.id !== deleteCarId)) 
       setDeleteCarId(null) 
