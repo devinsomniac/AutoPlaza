@@ -8,7 +8,7 @@ import TextArea from "./components/TextArea";
 import CheckBox from "./components/CheckBox";
 import { Button } from "@/components/ui/button";
 import { db } from "./../../configs";
-import { desc, eq } from 'drizzle-orm'
+import { desc, eq } from "drizzle-orm";
 import { CarImages, CarList } from "./../../configs/schema";
 import UploadImages from "./components/UploadImages";
 import { Separator } from "@/components/ui/separator";
@@ -17,40 +17,36 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import { FormatResult } from "@/Shared/Service";
 
-
-
 const AddListing = () => {
   const [formdata, setFormData] = useState([]);
   const [feature, setFeature] = useState([]);
-  const [triggerUploadImage,setTriggerUploadImage]  = useState()
-  const [searchParams] = useSearchParams()
-  const [loader,setLoader] = useState(false)
-  const navigate = useNavigate()
-  const {user} = useUser()
-  const [carInfo,setCarInfo] = useState()
-  const mode = searchParams.get('mode')
-  const recordId = searchParams.get('id')
+  const [triggerUploadImage, setTriggerUploadImage] = useState();
+  const [searchParams] = useSearchParams();
+  const [loader, setLoader] = useState(false);
+  const navigate = useNavigate();
+  const { user } = useUser();
+  const [carInfo, setCarInfo] = useState();
+  const mode = searchParams.get("mode");
+  const recordId = searchParams.get("id");
 
-
-  useEffect(()=>{
-    if(mode==='edit'){
-      GetListingDetail()
+  useEffect(() => {
+    if (mode === "edit") {
+      GetListingDetail();
     }
-  },[])
+  }, []);
 
-
-  const GetListingDetail = async() =>{
-    const result = await db.select().from(CarList)
-    .innerJoin(CarImages,eq(CarList.id,CarImages.carListId))
-    .where(eq(CarList.id,recordId))
-    const resp = FormatResult(result)
-    console.log(resp) 
-    setCarInfo(resp[0])
-    setFormData(resp[0])
-    setFeature(resp[0].features)
-    
-
-  }
+  const GetListingDetail = async () => {
+    const result = await db
+      .select()
+      .from(CarList)
+      .innerJoin(CarImages, eq(CarList.id, CarImages.carListId))
+      .where(eq(CarList.id, recordId));
+    const resp = FormatResult(result);
+    console.log(resp);
+    setCarInfo(resp[0]);
+    setFormData(resp[0]);
+    setFeature(resp[0].features);
+  };
 
   const handleInputChange = (name, value) => {
     setFormData((prevData) => ({
@@ -58,7 +54,6 @@ const AddListing = () => {
       [name]: value,
     }));
   };
-
 
   const handleFeatureChange = (name, value) => {
     setFeature((prevData) => ({
@@ -68,49 +63,46 @@ const AddListing = () => {
     console.log(feature);
   };
 
-
-  const onSubmit = async (e) => {
-    setLoader(true)
+  const onSubmit=async(e)=>{
+    setLoader(true);
     e.preventDefault();
     console.log(formdata);
-    if(mode === "edit"){
-      try{
-        const result = await db.update(CarList)
-        .set({
-          ...formdata,
-          features:feature,
-          createdBy:user?.primaryEmailAddress?.emailAddress,
-          postedOn:Date.now()
-        })
-        .where(eq(CarList.id,recordId))
-        setLoader(false)
+    
+    if(mode=='edit')
+    {
+        const result = await db.update(carListId).set({
+            ...formdata,
+            features:feature,
+            createdBy:user?.primaryEmailAddress?.emailAddress,
+            postedOn:moment().format('DD/MM/yyyy')
+        }).where(eq(carListId.id,recordId)).returning({id:CarListing.id}) ;
+        console.log(result);
         navigate("/profile")
-      }catch(err){
-        console.error("Error updating the listing", err);
-      }
-    }else{
-    try {
-      const result = await db.insert(CarList).values({
-        ...formdata,
-        features: feature,
-        createdBy: user?.primaryEmailAddress?.emailAddress,
-        postedOn: Date.now()
-      }).returning({id:CarList.id});
-      if(result)
-        {
-            console.log("Data Saved")
-            setTriggerUploadImage(result[0]?.id);
-            setLoader(false);
-        }
-      console.log(triggerUploadImage)
-      setLoader(false)
-      navigate("/profile")
-    } catch (err) {
-      console.log("There has benn an error", err);
+        setLoader(false);
     }
-  }
-  }
- 
+    else{
+        try{
+            const result=await db.insert(CarList).values({
+                ...formdata,
+                features:feature,
+                createdBy:user?.primaryEmailAddress?.emailAddress,
+                postedOn:Date.now()
+            },
+        ).returning({id:CarList.id});
+            if(result)
+            {
+                console.log("Data Saved")
+                setTriggerUploadImage(result[0]?.id);
+                setLoader(false);
+            }
+        }catch(e){
+            setLoader(false);
+            console.log("Error",e)
+        }
+}
+    
+}
+
 
   return (
     <div>
@@ -163,7 +155,7 @@ const AddListing = () => {
                     <CheckBox
                       item={item}
                       handleFeatureChange={handleFeatureChange}
-                      feature = {feature}
+                      feature={feature}
                     />
                   ) : null}
                   <label>{item?.label}</label>
@@ -178,23 +170,30 @@ const AddListing = () => {
           <div>
             <h2 className="font-medium text-xl mb-6">Upload The Car Image</h2>
             <UploadImages
-             editFileList = {carInfo?.images || []} 
-             triggerUploadImage={triggerUploadImage}
-             mode = {mode}
-             carInfo={carInfo}
-             setLoader={(v)=>{setLoader(v);}} />
+              triggerUploadImage={triggerUploadImage}
+              mode={mode}
+              carInfo={carInfo}
+              setLoader={(v) => {
+                setLoader(v);navigate("/profile");
+              }}
+            />
           </div>
           <div className="mt-10 flex justify-end">
-
-
             {/*The Submit Button of the form */}
-            <Button type="submit" onClick={(e) => onSubmit(e)} disabled={loader}>
-              {!loader ? 'Submit' : <AiOutlineLoading3Quarters className="animate-spin text-lg" />}
+            <Button
+              type="submit"
+              onClick={(e) => onSubmit(e)}
+              disabled={loader}
+            >
+              {!loader ? (
+                "Submit"
+              ) : (
+                <AiOutlineLoading3Quarters className="animate-spin text-lg" />
+              )}
             </Button>
           </div>
           <Separator className="my-6" />
         </form>
-       
       </div>
     </div>
   );
