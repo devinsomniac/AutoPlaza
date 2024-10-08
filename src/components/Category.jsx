@@ -1,5 +1,6 @@
 import React from "react";
 import data from "@/Shared/data";
+import { Link } from "react-router-dom";
 
 const Category = () => {
   return (
@@ -10,6 +11,7 @@ const Category = () => {
         lg:grid-cols-9 gap-6 px-20"
       >
         {data.Categories.map((Category, index) => (
+          <Link to={'Search/'+Category.name}>
           <div
             className="border rounded-xl p-3 
                 items-center flex flex-col hover:shadow-md cursor-pointer text-sm"
@@ -17,6 +19,7 @@ const Category = () => {
             <img src={Category.icon} width={35} height={35} />
             <h2>{Category.name}</h2>
           </div>
+          </Link>
         ))}
       </div>
     </div>
