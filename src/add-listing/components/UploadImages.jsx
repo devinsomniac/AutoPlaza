@@ -16,8 +16,8 @@ const UploadImages = ({ triggerUploadImage, setLoader, carInfo, mode }) => {
             setEditCarImageList([]);
             carInfo?.images.forEach((image)=>{
                 setEditCarImageList(prev=>[...prev,image?.imageUrl]);
-                
             })
+
         }
     },[carInfo])
 
@@ -75,7 +75,9 @@ const UploadImages = ({ triggerUploadImage, setLoader, carInfo, mode }) => {
                 })
             })
             
-           setLoader(false);
+            setTimeout(() => {
+                setLoader(false); // Stop the loader
+              }, 5000);
         })
        
     }

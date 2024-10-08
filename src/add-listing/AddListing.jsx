@@ -33,7 +33,7 @@ const AddListing = () => {
     if (mode === "edit") {
       GetListingDetail();
     }
-  }, []);
+  }, [mode, recordId]);
 
   const GetListingDetail = async () => {
     const result = await db
@@ -70,15 +70,26 @@ const AddListing = () => {
     
     if(mode=='edit')
     {
-        const result = await db.update(carListId).set({
+        const result = await db.update(CarList).set({
             ...formdata,
             features:feature,
             createdBy:user?.primaryEmailAddress?.emailAddress,
-            postedOn:moment().format('DD/MM/yyyy')
-        }).where(eq(carListId.id,recordId)).returning({id:CarListing.id}) ;
+            postedOn:Date.now()
+        }).where(eq(CarList.id,recordId)).returning({id:CarList.id}) ;
         console.log(result);
-        navigate("/profile")
-        setLoader(false);
+        if(result)
+          {
+              console.log("Data Saved")
+              setTimeout(() => {
+                setTriggerUploadImage(result[0]?.id);
+              }, 500);
+              
+              setTimeout(() => {
+                
+                setLoader(false);
+                navigate("/profile"); 
+              }, 5000);
+          }
     }
     else{
         try{
@@ -92,8 +103,14 @@ const AddListing = () => {
             if(result)
             {
                 console.log("Data Saved")
-                setTriggerUploadImage(result[0]?.id);
-                setLoader(false);
+                console.log(result)
+                setTimeout(() => {
+                  setTriggerUploadImage(result[0]?.id);
+                }, 2500);
+                setTimeout(() => {
+                  setLoader(false); 
+                  navigate("/profile");
+                }, 5000);
             }
         }catch(e){
             setLoader(false);
