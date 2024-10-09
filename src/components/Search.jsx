@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Select,
   SelectContent,
@@ -9,13 +9,17 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { FaSearch } from "react-icons/fa";
 import data from "@/Shared/data";
+import { Link } from "react-router-dom";
 
 
-const Search = () => {
+const Search = ({getCarList}) => {
+  const [type,setType] = useState(null)
+  const [manufacturer,setManufacturer] = useState(null)
+  const [price,setPrice] = useState(null)
   return (
     <div className="flex p-2 md:p-5 bg-white rounded-md md:rounded-full flex-col md:flex-row gap-10 px-5 items-center w-full md:w-max">
       
-      <Select>
+      <Select onValueChange={(value) => setType(value)}>
         <SelectTrigger className="w-[180px] outline-none md:border-none shadow-none text-lg">
           <SelectValue placeholder="Type" />
         </SelectTrigger>
@@ -27,7 +31,7 @@ const Search = () => {
       
       <Separator orientation="vertical" className="hidden md:block" />
       
-      <Select>
+      <Select onValueChange={(value) => setManufacturer(value)}>
         <SelectTrigger className="w-[180px] outline-none md:border-none shadow-none text-lg">
           <SelectValue placeholder="Manufacturer" />
         </SelectTrigger>
@@ -40,7 +44,7 @@ const Search = () => {
       
       <Separator orientation="vertical" className="hidden md:block" />
       
-      <Select>
+      {/* <Select onValueChange={(value) => setPrice(value)}>
         <SelectTrigger className="w-[180px] outline-none md:border-none shadow-none text-lg">
           <SelectValue placeholder="Pricing" />
         </SelectTrigger>
@@ -49,8 +53,10 @@ const Search = () => {
                 <SelectItem value={pricing.amount}>{pricing.amount}</SelectItem>
             ))}
         </SelectContent>
-      </Select>
-      <FaSearch className="text-[50px] bg-primary rounded-full p-3 text-white hover:scale-105 transition-all" />
+      </Select> */}
+      <Link to={"/Search?type=" + type + "&manufacturer=" + manufacturer}>
+      <FaSearch className="text-[50px] bg-primary rounded-full p-3 text-white hover:scale-105 transition-all" onClick={getCarList} />
+      </Link>
     </div>
   );
 };

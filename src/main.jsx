@@ -9,6 +9,7 @@ import Profile from "./profile/Profile";
 import AddListing from "./add-listing/AddListing";
 import { Toaster } from "./components/ui/sonner";
 import SearchByCategory from "./Search/[category]";
+import SearchByOption from "./Search";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
   {
     path:"/Search/:category",
     element:<SearchByCategory/>
+  },
+  {
+    path:"/Search",
+    element:<SearchByOption/>
   }
 
 ]);
