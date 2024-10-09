@@ -7,6 +7,7 @@ export const CarList = pgTable('CarList',{
     originalPrice:varchar('originalPrice'),
     sellingPrice:varchar('sellingPrice').notNull(),
     category:varchar('category').notNull(),
+    condition:varchar('condition').notNull(),
     make:varchar('make').notNull(),
     model:varchar('model').notNull(),
     year:varchar('year').notNull(),
