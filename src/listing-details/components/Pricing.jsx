@@ -6,7 +6,7 @@ import { FaHome } from "react-icons/fa";
 
 const Pricing = ({carDetails}) => {
   return (
-    <div className='w-full h-[180px] bg-white shadow-2xl rounded-lg p-8'>
+    <div className='w-full h-[180px] bg-white shadow-2xl border border-black  rounded-lg p-8'>
         <h2>Our Price</h2>
         <h1 className='font-bold text-4xl' my-2>$ {carDetails.sellingPrice}</h1>
         <Link to={"/"}>

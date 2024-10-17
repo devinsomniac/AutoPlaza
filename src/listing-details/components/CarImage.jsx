@@ -7,7 +7,7 @@ const CarImage = ({carDetails}) => {
         <img
           src={carDetails.images[0].imageUrl}
           alt="Car"
-          className="w-full h-[500px] object-cover rounded-xl shadow-lg"
+          className="w-full h-[500px] object-contain md:object-cover rounded-xl shadow-lg"
         />
       ) : (
         <div className='w-full h-[500px] rounded-xl animate-pulse bg-slate-500'>

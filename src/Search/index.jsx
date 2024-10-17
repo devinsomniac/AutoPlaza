@@ -9,7 +9,7 @@ import Search from '@/components/Search';
 import CarItem from '@/components/CarItem';
 
 const SearchByOption = () => {
-    const [searchParams] = useSearchParams(); // Get the search params
+    const [searchParams] = useSearchParams(); 
     const [carList, setCarList] = useState([]);
     const type = searchParams.get('type'); // Get the type param
     const manufacturer = searchParams.get('manufacturer'); // Get the manufacturer param

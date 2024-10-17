@@ -11,6 +11,11 @@ import CarImage from "../components/CarImage";
 import Description from "../components/Description";
 import Features from "../components/Features";
 import Pricing from "../components/Pricing";
+import Specifications from "../components/Specifications";
+import Footer from "@/components/Footer";
+import OwnerDetails from "../components/OwnerDetails";
+import MostSearchCar from "@/components/MostSearchCar";
+import Finance from "../components/Finance";
 
 const ListingDetail = () => {
   const [carDetails, setCarDetails] = useState([]);
@@ -35,7 +40,7 @@ const ListingDetail = () => {
   return (
     <div>
       <Header />
-      <div className="p-10 flex justify-center bg-slate-400">
+      <div className="p-10 flex justify-center bg-[#eef0fc]">
         <Search />
       </div>
 
@@ -49,15 +54,21 @@ const ListingDetail = () => {
                 <Description carDetails={carDetails}/>
                 {/* feature List */}
                 <Features features={carDetails?.features}/>
+                {/* Finance Calculator */}
+                <Finance carDetails={carDetails}/>
             </div>
             <div className="right md:col-span-1">
                 {/* Pricing */}
                 <Pricing carDetails={carDetails}/>
                 {/* Properties */}
+                <Specifications carDetails={carDetails}/>
                 {/* Owner Details */}
+                <OwnerDetails carDetails={carDetails}/>
             </div>
         </div>
       </div>
+      <MostSearchCar/>
+      <Footer/>
     </div>
   );
 };

@@ -17,7 +17,7 @@ const Search = ({getCarList}) => {
   const [manufacturer,setManufacturer] = useState(null)
   const [price,setPrice] = useState(null)
   return (
-    <div className="flex p-2 md:p-5 bg-white rounded-md md:rounded-full flex-col md:flex-row gap-10 px-5 items-center w-full md:w-max">
+    <div className="flex p-8 md:p-5 bg-white rounded-md md:rounded-full flex-col md:flex-row gap-10 px-5 items-center w-full md:w-max">
       
       <Select onValueChange={(value) => setType(value)}>
         <SelectTrigger className="w-[180px] outline-none md:border-none shadow-none text-lg">
@@ -43,17 +43,6 @@ const Search = ({getCarList}) => {
       </Select>
       
       <Separator orientation="vertical" className="hidden md:block" />
-      
-      {/* <Select onValueChange={(value) => setPrice(value)}>
-        <SelectTrigger className="w-[180px] outline-none md:border-none shadow-none text-lg">
-          <SelectValue placeholder="Pricing" />
-        </SelectTrigger>
-        <SelectContent>
-            {data.Pricings.map((pricing,index)=>(
-                <SelectItem value={pricing.amount}>{pricing.amount}</SelectItem>
-            ))}
-        </SelectContent>
-      </Select> */}
       <Link to={"/Search?type=" + type + "&manufacturer=" + manufacturer}>
       <FaSearch className="text-[50px] bg-primary rounded-full p-3 text-white hover:scale-105 transition-all" onClick={getCarList} />
       </Link>
