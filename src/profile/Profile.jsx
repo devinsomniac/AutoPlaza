@@ -27,8 +27,6 @@ const Profile = () => {
         <Tabs defaultValue="account" className="w-full">
           <TabsList className="w-full flex justify-start">
             <TabsTrigger value="myListings">My Listings</TabsTrigger>
-            <TabsTrigger value="inbox">Inbox</TabsTrigger>
-            <TabsTrigger value="profile">Profile</TabsTrigger>
           </TabsList>
 
           <TabsContent value="myListings">
@@ -53,9 +51,6 @@ const Profile = () => {
               </>
             )}
           </TabsContent>
-
-          <TabsContent value="inbox">List of Messages</TabsContent>
-
           <TabsContent value="profile">My Profile Details</TabsContent>
         </Tabs>
       </div>

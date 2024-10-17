@@ -1,4 +1,6 @@
 import React from 'react'
+import { Button } from './ui/button'
+import { Link } from 'react-router-dom'
 
 const InfoSection = () => {
   return (
@@ -23,12 +25,15 @@ const InfoSection = () => {
           quidem quam repellat.
         </p>
 
-        <a
+        {/* <a
           href="#"
           className="mt-8 inline-block rounded bg-indigo-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-indigo-700 focus:outline-none focus:ring focus:ring-yellow-400"
         >
           Get Started Today
-        </a>
+        </a> */}
+        <Link to={"/add-listing"}>
+        <Button>Submit Listing</Button>
+        </Link>
       </div>
     </div>
   </div>

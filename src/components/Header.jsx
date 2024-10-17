@@ -22,14 +22,15 @@ const Header = () => {
         <li className="font-medium hover:scale-105 transition-all cursor-pointer hover:text-primary ">
           New
         </li>
-        <li className="font-medium hover:scale-105 transition-all cursor-pointer hover:text-primary ">
-          Preowned
-        </li>
       </ul>
       {isSignedIn ? (
         <div className="flex justify-center items-center gap-5">
           <Link to={"/profile"}>
+          <div className="flex items-center gap-2 bg-slate-300 p-2 rounded-xl">
           <UserButton />
+          <h2 className="font-semibold">Profile</h2>
+          </div>
+          
           </Link>
           <Link to="/add-listing">
             <Button>Submit Listing</Button>
