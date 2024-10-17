@@ -74,7 +74,7 @@ const Footer = () => {
             </a>
           </li>
         </ul>
-
+        
         <ul className="mt-12 flex justify-center gap-6 md:gap-8">
           <li>
             <a
@@ -187,6 +187,7 @@ const Footer = () => {
             </a>
           </li>
         </ul>
+        <h2 className="text-center mt-8">Made with love by Insomniac ❤️</h2>
       </div>
     </footer>
   );
