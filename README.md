@@ -57,3 +57,9 @@ npm run dev
 - **Add a Listing**: After authenticating, users can add a new car listing with images.
 - **Browse Listings**: View available car listings, sorted by various filters.
 - **Authentication**: Users can sign up or log in using Clerk for a secure experience.
+
+##Demo
+###Here are some screenshots of the key features:
+
+- **Homepage**
+  ![Homepage](Images/one.png)
