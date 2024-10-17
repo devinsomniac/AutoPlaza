@@ -43,7 +43,7 @@ const SearchByCategory = () => {
       </div>
       <div className="p-10 md:p20">
         <h2 className="font-bold text-4xl ">{category}</h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-7 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 mt-7 gap-5">
           {/* Render loading skeletons if data is still loading */}
           {loading ? (
             // Show skeletons while loading
