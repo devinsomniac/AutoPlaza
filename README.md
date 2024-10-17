@@ -63,3 +63,28 @@ npm run dev
 
 - **Homepage**
   ![Homepage](Images/one.png)
+
+- **Browse By Type**
+  ![Homepage](Images/two.png)
+
+- **Result of by Category**
+  ![Homepage](Images/three.png)
+
+- **My Listing**
+  ![Homepage](Images/four.png)
+
+- **Add Listing form one**
+  ![Homepage](Images/five.png)
+
+- **Add Listing form two**
+  ![Homepage](Images/six.png)
+
+- **Car Details One**
+  ![Homepage](Images/seven.png)
+
+- **Car Details Two**
+  ![Homepage](Images/eight.png)
+
+
+##You can Check out the demo in the link given :
+  [Check out the demo here](https://auto-plaza.vercel.app/)
